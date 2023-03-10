@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todo List</title>
+	<style>
+     body {
+  background-color: #121212;
+  color: #fff;
+}
+
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #212121;
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px #4d4d4d;
+}
+
+.task-input {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.task-input input[type="text"] {
+  flex-grow: 1;
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  font-size: 16px;
+  margin-right: 10px;
+  background-color: #383838;
+  color: #fff;
+}
+
+.task-input button {
+  background-color: #00d1b2;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.task-input button:hover {
+  background-color: #08a390;
+}
+
+.task-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.task-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #383838;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+  position: relative;
+  box-shadow: 0px 0px 10px #4d4d4d;
+}
+
+.task-item.done .task-text {
+  text-decoration: line-through;
+  color: #888;
+}
+
+.task-item.done .btn-done {
+  background-color: #888;
+  cursor: not-allowed;
+}
+
+.task-item .task-text {
+  flex-grow: 1;
+  font-size: 16px;
+  color: #fff;
+}
+
+.task-item .btn-done,
+.task-item .btn-delete {
+  background-color: #00d1b2;
+  color: #fff;
+  border: none;
+  padding: 8px;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 10px;
+}
+
+.task-item .btn-delete {
+  background-color: #f44336;
+  right: 80px;
+}
+
+.task-item .btn-done:hover,
+.task-item .btn-delete:hover {
+  background-color: #08a390;
+}
+
+	</style>
+</head>
+<body>
+    <body>
+        <div class="container">
+            <div class="task-input">
+                <input type="text" id="taskInput" placeholder="Add a task...">
+                <button id="addBtn">Add</button>
+            </div>
+            <ul class="task-list" id="taskList"></ul>
+        </div>
+<script>
+const taskListElement = document.getElementById('taskList');
+const taskInput = document.getElementById('taskInput');
+const addBtn = document.getElementById('addBtn');
+
+let taskList = [];
+
+// Get task list from localStorage if available
+if (localStorage.getItem('taskList')) {
+  taskList = JSON.parse(localStorage.getItem('taskList'));
+  renderTaskList();
+}
+
+addBtn.addEventListener('click', addTask);
+taskInput.addEventListener('keypress', function(event) {
+  if (event.keyCode === 13) {
+    addTask();
+  }
+});
+
+function addTask() {
+  const taskName = taskInput.value.trim();
+  if (!taskName) {
+    return;
+  }
+  taskList.push({
+    name: taskName,
+    isDone: false
+  });
+  taskInput.value = '';
+  renderTaskList();
+  // Save task list to localStorage
+  localStorage.setItem('taskList', JSON.stringify(taskList));
+}
+
+function deleteTask(index) {
+  taskList.splice(index, 1);
+  renderTaskList();
+  // Save task list to localStorage
+  localStorage.setItem('taskList', JSON.stringify(taskList));
+}
+
+function toggleTaskDone(index) {
+  taskList[index].isDone = !taskList[index].isDone;
+  renderTaskList();
+  // Save task list to localStorage
+  localStorage.setItem('taskList', JSON.stringify(taskList));
+}
+
+function renderTaskList() {
+  taskListElement.innerHTML = '';
+  for (let i = 0; i < taskList.length; i++) {
+    const task = taskList[i];
+    const taskItemElement = document.createElement('li');
+    taskItemElement.classList.add('task-item');
+    if (task.isDone) {
+      taskItemElement.classList.add('done');
+    }
+    const taskTextElement = document.createElement('div');
+    taskTextElement.classList.add('task-text');
+    taskTextElement.innerText = task.name;
+    const btnDoneElement = document.createElement('button');
+    btnDoneElement.classList.add('btn-done');
+    btnDoneElement.innerText = task.isDone ? 'Undone' : 'Done';
+    btnDoneElement.addEventListener('click', function() {
+      toggleTaskDone(i);
+    });
+    const btnDeleteElement = document.createElement('button');
+    btnDeleteElement.classList.add('btn-delete');
+    btnDeleteElement.innerText = 'Delete';
+    btnDeleteElement.addEventListener('click', function() {
+      deleteTask(i);
+    });
+    taskItemElement.appendChild(taskTextElement);
+    taskItemElement.appendChild(btnDoneElement);
+    taskItemElement.appendChild(btnDeleteElement);
+    taskListElement.appendChild(taskItemElement);
+  }
+}
+
+</script>
+       
+        
+</body>
+</html>
