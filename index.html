@@ -118,40 +118,6 @@
 .task-item .btn-delete:hover {
   background-color: #08a390;
 }
-		.popup {
-  display: none;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 16px;
-   background-color: #212121;
-  z-index: 999;
-  text-align: center;
-}
-
-.popup-content {
-  max-width: 300px;
-  margin: 0 auto;
-}
-
-.add-button,
-.dismiss-button {
-  display: inline-block;
-  margin: 8px;
-  padding: 8px 16px;
-  background-color:#08a390;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease-in-out;
-}
-
-.add-button:hover,
-.dismiss-button:hover {
-  background-color: #f44336;
-}
 
 	</style>
 </head>
@@ -164,14 +130,6 @@
             </div>
             <ul class="task-list" id="taskList"></ul>
         </div>
-	    <div id="popup" class="popup">
-  <div class="popup-content">
-    <p>Tambahkan website ini ke layar utama anda untuk akses yang lebih cepat dan mudah.</p>
-    <button class="add-button" onclick="addToHomeScreen()">Tambahkan ke layar utama</button>
-    <button class="dismiss-button" onclick="dismissPopup()">Tidak, terima kasih</button>
-  </div>
-</div>
-
 <script>
 const taskListElement = document.getElementById('taskList');
 const taskInput = document.getElementById('taskInput');
@@ -251,40 +209,7 @@ function renderTaskList() {
     taskListElement.appendChild(taskItemElement);
   }
 }
-// Fungsi untuk menampilkan popup
-function showPopup() {
-  document.getElementById('popup').style.display = 'block';
-}
 
-// Fungsi untuk menyembunyikan popup
-function dismissPopup() {
-  document.getElementById('popup').style.display = 'none';
-}
-
-// Fungsi untuk menambahkan shortcut ke layar utama
-function addToHomeScreen() {
-  if (window.navigator.standalone == true) {
-    // Jika sudah di-instal, tampilkan pesan sukses
-    alert('Website sudah di-instal di layar utama anda!');
-  } else if (window.matchMedia('(display-mode: standalone)').matches) {
-    // Jika sedang dalam mode standalone, tampilkan pesan sukses
-    alert('Website sudah di-instal di layar utama anda!');
-  } else {
-    // Tampilkan pesan untuk menambahkan ke layar utama
-    if (window.confirm('Tekan "Tambahkan" untuk menambahkan website ini ke layar utama anda.')) {
-      // Tampilkan instruksi untuk menambahkan ke layar utama
-      alert('Tekan tombol "Tambahkan ke layar utama" dan ikuti instruksinya.');
-    }
-  }
-
-  // Sembunyikan popup
-  dismissPopup();
-}
-
-// Tampilkan popup setelah halaman dimuat
-window.onload = function() {
-  setTimeout(showPopup, 2000); // Tampilkan popup setelah 2 detik
-}
 </script>
        
         
